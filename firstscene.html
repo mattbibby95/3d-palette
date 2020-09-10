@@ -1,9 +1,24 @@
+<htmL>
+
+<head>
+    <script src="https://kit.fontawesome.com/60e5d6a33b.js" crossorigin="anonymous"></script>
+</head>
+
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Overpass&display=swap');
+
     html,
     body {
         margin: 0;
         width: 100%;
         height: 100%;
+        font-family: 'Overpass',
+            sans-serif;
+    }
+
+    .Page {
+        position: relative;
+        overflow-x: hidden;
     }
 
 
@@ -18,15 +33,50 @@
         justify-content: center;
     }
 
+    #HeaderToggle {
+        position: absolute;
+        top: -100;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        transition: 1s;
+        font-size: 2em;
+    }
+
+    .ToolbarColours {
+        background-color: #e6e2d3;
+        border-color: #3e4444;
+        color: #3e4444;
+        border-style: solid;
+    }
+
+    .ToolbarArrowTop {
+        border-top: none;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .ToolbarArrowRight {
+        border-right: none;
+        padding-right: 10px;
+        padding-left: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
     #HeaderContent {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        background-color: #5D5C61;
-        color: #B1A296;
         width: 75%;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
+        border-style: solid;
+        border-top: none;
     }
 
     #canv {
@@ -52,45 +102,62 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: #5D5C61;
-        color: #B1A296;
+        border-style: solid;
+        border-right: none;
         border-top-left-radius: 20px;
         border-bottom-left-radius: 20px;
+    }
+
+    #SidebarToggle {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        right: -100;
+        transition: 1s;
+        font-size: 2em;
     }
 </style>
 
 
 <body class="Page">
     <header id="Header">
-        <div id="HeaderContent">
+        <div id="HeaderContent" class="ToolbarColours">
             <h1>3D Palette Viewer</h1>
-            <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
             <a href="javascript:void(0)" class="closebtn" onclick="closeHead()">×</a>
-            Header info goes here
         </div>
     </header>
+    <div id="HeaderToggle">
+        <i class="fas fa-angle-down ToolbarArrowTop ToolbarColours" onclick="openHead()"></i>
+    </div>
     <aside id="Sidebar">
-        <div id="SidebarContent">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-            <button class="openbtn" onclick="openHead()">&#9776; Open Header</button>
-            Sidebar info goes here -->
+        <div id="SidebarContent" class="ToolbarColours">
+            <a href=" javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         </div>
     </aside>
+    <div id="SidebarToggle">
+        <i class="fas fa-angle-left ToolbarColours ToolbarArrowRight" onclick="openNav()"></i>
+    </div>
     <canvas id="canv"></canvas>
 </body>
 
 <script>
     function openNav() {
         document.getElementById("Sidebar").style.width = "10%";
+        document.getElementById("SidebarToggle").style.right = "-100";
     }
     function closeNav() {
         document.getElementById("Sidebar").style.width = "0";
+        document.getElementById("SidebarToggle").style.right = "0";
     }
     function openHead() {
         document.getElementById("Header").style.height = "10%";
+        document.getElementById("HeaderToggle").style.top = "-100";
     }
     function closeHead() {
         document.getElementById("Header").style.height = "0";
+        document.getElementById("HeaderToggle").style.top = "0";
     }
 </script>
 
@@ -185,3 +252,5 @@
     main();
 
 </script>
+
+</htmL>
