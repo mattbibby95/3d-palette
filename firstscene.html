@@ -6,19 +6,30 @@
         height: 100%;
     }
 
-    .Page {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 100px 1fr;
+
+    #Header {
+        position: absolute;
+        top: 0;
+        height: 10%;
+        width: 100%;
+        overflow-y: hidden;
+        transition: 0.5s;
+        display: flex;
+        justify-content: center;
     }
 
-    .Header {
-        grid-row: 1 / 2;
-        background-color: grey;
+    #HeaderContent {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #5D5C61;
+        color: #B1A296;
+        width: 75%;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
     }
 
-    #c {
-        grid-row: 2 / 3;
+    #canv {
         width: 100%;
         height: 100%;
     }
@@ -27,31 +38,59 @@
         position: absolute;
         right: 0;
         height: 100%;
-        width: 250px;
-        background-color: yellow;
+        width: 10%;
         overflow-x: hidden;
         transition: 0.5s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #SidebarContent {
+        height: 65%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: #5D5C61;
+        color: #B1A296;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
     }
 </style>
 
 
 <body class="Page">
+    <header id="Header">
+        <div id="HeaderContent">
+            <h1>3D Palette Viewer</h1>
+            <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeHead()">×</a>
+            Header info goes here
+        </div>
+    </header>
     <aside id="Sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        Sidebar info goes here
+        <div id="SidebarContent">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+            <button class="openbtn" onclick="openHead()">&#9776; Open Header</button>
+            Sidebar info goes here -->
+        </div>
     </aside>
-    <header class="Header">
-        <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
-        Header info goes here</header>
-    <canvas id="c"></canvas>
+    <canvas id="canv"></canvas>
 </body>
 
 <script>
     function openNav() {
-        document.getElementById("Sidebar").style.width = "250px";
+        document.getElementById("Sidebar").style.width = "10%";
     }
     function closeNav() {
         document.getElementById("Sidebar").style.width = "0";
+    }
+    function openHead() {
+        document.getElementById("Header").style.height = "10%";
+    }
+    function closeHead() {
+        document.getElementById("Header").style.height = "0";
     }
 </script>
 
@@ -62,7 +101,7 @@
 
     function main() {
 
-        const canvas = document.querySelector('#c');
+        const canvas = document.querySelector('#canv');
         const renderer = new THREE.WebGLRenderer({ canvas });
 
         const fov = 90;
@@ -73,6 +112,7 @@
         camera.position.z = 2;
 
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xC6E2E9);
 
         {
             const color = 0xFFFFFF;
