@@ -1,131 +1,19 @@
 <htmL>
 
 <head>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/60e5d6a33b.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./js/PageFunctions.js"></script>
+    <script type="module" src="./js/SceneScript.js"></script>
 </head>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Overpass&display=swap');
-
-    html,
-    body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        font-family: 'Overpass',
-            sans-serif;
-    }
-
-    .Page {
-        position: relative;
-        overflow-x: hidden;
-    }
-
-
-    #Header {
-        position: absolute;
-        top: 0;
-        height: 10%;
-        width: 100%;
-        overflow-y: hidden;
-        transition: 0.5s;
-        display: flex;
-        justify-content: center;
-    }
-
-    #HeaderToggle {
-        position: absolute;
-        top: -100;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        transition: 1s;
-        font-size: 2em;
-    }
-
-    .ToolbarColours {
-        background-color: #e6e2d3;
-        border-color: #3e4444;
-        color: #3e4444;
-        border-style: solid;
-    }
-
-    .ToolbarArrowTop {
-        border-top: none;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
-
-    .ToolbarArrowRight {
-        border-right: none;
-        padding-right: 10px;
-        padding-left: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-    }
-
-    #HeaderContent {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        width: 75%;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-        border-style: solid;
-        border-top: none;
-    }
-
-    #canv {
-        width: 100%;
-        height: 100%;
-    }
-
-    #Sidebar {
-        position: absolute;
-        right: 0;
-        height: 100%;
-        width: 10%;
-        overflow-x: hidden;
-        transition: 0.5s;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    #SidebarContent {
-        height: 65%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        border-style: solid;
-        border-right: none;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-    }
-
-    #SidebarToggle {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-        right: -100;
-        transition: 1s;
-        font-size: 2em;
-    }
-</style>
 
 
 <body class="Page">
     <header id="Header">
         <div id="HeaderContent" class="ToolbarColours">
             <h1>3D Palette Viewer</h1>
-            <a href="javascript:void(0)" class="closebtn" onclick="closeHead()">×</a>
+            <h2>Created By Matt Bibby</h2>
+            <a href="javascript:void(0)" onclick="closeHead()"><i class="fas fa-times CloseIcon"></i></a>
         </div>
     </header>
     <div id="HeaderToggle">
@@ -133,7 +21,9 @@
     </div>
     <aside id="Sidebar">
         <div id="SidebarContent" class="ToolbarColours">
-            <a href=" javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+            <input id="body-color" type="color" value="#C6E2E9"></input>
+            Body
+            <a href=" javascript:void(0)" onclick="closeNav()"><i class="fas fa-times closeIcon"></i></a>
         </div>
     </aside>
     <div id="SidebarToggle">
@@ -141,116 +31,5 @@
     </div>
     <canvas id="canv"></canvas>
 </body>
-
-<script>
-    function openNav() {
-        document.getElementById("Sidebar").style.width = "10%";
-        document.getElementById("SidebarToggle").style.right = "-100";
-    }
-    function closeNav() {
-        document.getElementById("Sidebar").style.width = "0";
-        document.getElementById("SidebarToggle").style.right = "0";
-    }
-    function openHead() {
-        document.getElementById("Header").style.height = "10%";
-        document.getElementById("HeaderToggle").style.top = "-100";
-    }
-    function closeHead() {
-        document.getElementById("Header").style.height = "0";
-        document.getElementById("HeaderToggle").style.top = "0";
-    }
-</script>
-
-<script type="module">
-
-    import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/build/three.module.js';
-
-
-    function main() {
-
-        const canvas = document.querySelector('#canv');
-        const renderer = new THREE.WebGLRenderer({ canvas });
-
-        const fov = 90;
-        const aspect = 2;
-        const near = 0.1;
-        const far = 5;
-        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        camera.position.z = 2;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xC6E2E9);
-
-        {
-            const color = 0xFFFFFF;
-            const intensity = 1;
-            const light = new THREE.DirectionalLight(color, intensity);
-            light.position.set(-1, 2, 4);
-            scene.add(light);
-        }
-
-        function makeInstance(geometry, color, x) {
-            const material = new THREE.MeshPhongMaterial({ color });
-
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-
-            cube.position.x = x;
-
-            return cube;
-        }
-
-        const boxWidth = 1;
-        const boxHeight = 1;
-        const boxDepth = 1;
-        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
-        const cubes = [
-            makeInstance(geometry, 0x44aa88, 0),
-            makeInstance(geometry, 0x8844aa, -2),
-            makeInstance(geometry, 0xaa8844, 2),
-        ]
-
-        function resizeRendererToDisplaySize(renderer) {
-            const canvas = renderer.domElement;
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-
-            const needResize = canvas.width !== width || canvas.height !== height;
-
-            if (needResize) {
-                renderer.setSize(width, height, false);
-            }
-
-            return needResize;
-        }
-
-        function render(time) {
-            time *= 0.001;
-
-            if (resizeRendererToDisplaySize(renderer)) {
-                const canvas = renderer.domElement;
-                camera.aspect = canvas.clientWidth / canvas.clientHeight;
-                camera.updateProjectionMatrix();
-            }
-
-            cubes.forEach((cube, ndx) => {
-                const speed = 1 + ndx * .1;
-                const rot = time * speed;
-                cube.rotation.x = rot;
-                cube.rotation.y = rot;
-            });
-
-            renderer.render(scene, camera);
-            requestAnimationFrame(render);
-        }
-
-        requestAnimationFrame(render);
-
-    }
-
-    main();
-
-</script>
 
 </htmL>
