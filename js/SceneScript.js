@@ -1,4 +1,7 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/build/three.module.js';
+import { GLTFLoader } from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from '../helpers/OrbitControls.js';
+
 
 
 function main() {
@@ -12,6 +15,7 @@ function main() {
     const far = 5;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = 2;
+    camera.position.y = 1;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xC6E2E9);
@@ -25,27 +29,39 @@ function main() {
         scene.add(light);
     }
 
-    function makeInstance(geometry, color, x) {
-        const material = new THREE.MeshPhongMaterial({ color });
+    const gltfLoader = new GLTFLoader();
+    const url = '../models/FloatingTrees.glb';
+    gltfLoader.load(url, (gltf) => {
+        const root = gltf.scene;
+        root.position.set(0, 0, 0);
+        root.scale.set(0.2, 0.2, 0.2);
+        scene.add(root);
+    });
 
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+    let controls = new OrbitControls(camera, renderer.domElement);
+    controls.autoRotate = true;
 
-        cube.position.x = x;
+    // function makeInstance(geometry, color, x) {
+    //     const material = new THREE.MeshPhongMaterial({ color });
 
-        return cube;
-    }
+    //     const cube = new THREE.Mesh(geometry, material);
+    //     scene.add(cube);
 
-    const boxWidth = 1;
-    const boxHeight = 1;
-    const boxDepth = 1;
-    const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+    //     cube.position.x = x;
 
-    const cubes = [
-        makeInstance(geometry, 0x44aa88, 0),
-        makeInstance(geometry, 0x8844aa, -2),
-        makeInstance(geometry, 0xaa8844, 2),
-    ]
+    //     return cube;
+    // }
+
+    // const boxWidth = 1;
+    // const boxHeight = 1;
+    // const boxDepth = 1;
+    // const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+    // const cubes = [
+    //     makeInstance(geometry, 0x44aa88, 0),
+    //     makeInstance(geometry, 0x8844aa, -2),
+    //     makeInstance(geometry, 0xaa8844, 2),
+    // ]
 
     const backgroundColourInput = document.getElementById('body-color');
     backgroundColourInput.addEventListener('input', function () {
@@ -75,16 +91,18 @@ function main() {
             camera.updateProjectionMatrix();
         }
 
-        cubes.forEach((cube, ndx) => {
-            const speed = 1 + ndx * .1;
-            const rot = time * speed;
-            cube.rotation.x = rot;
-            cube.rotation.y = rot;
-        });
+        // cubes.forEach((cube, ndx) => {
+        //     const speed = 1 + ndx * .1;
+        //     const rot = time * speed;
+        //     cube.rotation.x = rot;
+        //     cube.rotation.y = rot;
+        // });
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);
+        controls.update();
     }
+
 
     requestAnimationFrame(render);
 
