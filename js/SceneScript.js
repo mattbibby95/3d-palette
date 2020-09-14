@@ -9,7 +9,8 @@ function main() {
     const canvas = document.querySelector('#canv');
     const renderer = new THREE.WebGLRenderer({ canvas });
 
-    const fov = 90;
+    // Camera Setup
+    const fov = 75;
     const aspect = 2;
     const near = 0.1;
     const far = 5;
@@ -17,26 +18,54 @@ function main() {
     camera.position.z = 2;
     camera.position.y = 1;
 
+    // Scene Setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xC6E2E9);
-    scene.fog = new THREE.Fog(0xeeeeee, 10, 50)
 
-    {
-        const color = 0xFFFFFF;
-        const intensity = 1;
-        const light = new THREE.DirectionalLight(color, intensity);
-        light.position.set(-1, 2, 4);
-        scene.add(light);
-    }
+    // // Light Setup
+    // {
+    //     const color = 0xFFFFFF;
+    //     const intensity = 1;
+    //     const light = new THREE.DirectionalLight(color, intensity);
+    //     light.position.set(-1, 2, 4);
+    //     scene.add(light);
+    // }
 
+    // Light Setup
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    backLight.position.set(-5, 5, 1);
+    scene.add(backLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    fillLight.position.set(4, 5, 0.1);
+    scene.add(fillLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    keyLight.position.set(1, 5, 4);
+    scene.add(keyLight);
+
+    // 3D Model Setup
     const gltfLoader = new GLTFLoader();
     const url = '../models/FloatingTrees.glb';
     gltfLoader.load(url, (gltf) => {
         const root = gltf.scene;
-        root.position.set(0, 0, 0);
-        root.scale.set(0.2, 0.2, 0.2);
+        root.position.set(0, -0.1, 0);
+        root.rotation.set(0, -20, 0);
+        root.scale.set(0.3, 0.3, 0.3);
         scene.add(root);
+        backLight.target = root;
+        fillLight.target = root;
+        keyLight.target = root;
     });
+
+    // Light Helpers
+    // const backHelp = new THREE.DirectionalLightHelper(backLight);
+    // const fillHelp = new THREE.DirectionalLightHelper(fillLight);
+    // const keyHelp = new THREE.DirectionalLightHelper(keyLight);
+    // scene.add(backHelp);
+    // scene.add(fillHelp);
+    // scene.add(keyHelp);
+
 
     let controls = new OrbitControls(camera, renderer.domElement);
     controls.autoRotate = true;
