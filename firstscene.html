@@ -1,147 +1,48 @@
-<style>
-    html,
-    body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-    }
+<htmL>
 
-    .Page {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 100px 1fr;
-    }
-
-    .Header {
-        grid-row: 1 / 2;
-        background-color: grey;
-    }
-
-    #c {
-        grid-row: 2 / 3;
-        width: 100%;
-        height: 100%;
-    }
-
-    #Sidebar {
-        position: absolute;
-        right: 0;
-        height: 100%;
-        width: 250px;
-        background-color: yellow;
-        overflow-x: hidden;
-        transition: 0.5s;
-    }
-</style>
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/60e5d6a33b.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./js/PageFunctions.js"></script>
+    <script type="module" src="./js/SceneScript.js"></script>
+</head>
 
 
 <body class="Page">
+    <header id="Header">
+        <div id="HeaderContent" class="ToolbarColours">
+            <h1>3D Palette Viewer</h1>
+            <h2>Created By Matt Bibby</h2>
+            <h2><a href="https://github.com/mattbibby95?tab=repositories"><i class="fab fa-github"></i></a></h2>
+            <a href="javascript:void(0)" onclick="closeHead()"><i class="fas fa-times CloseIcon"></i></a>
+        </div>
+    </header>
+    <div id="HeaderToggle">
+        <i class="fas fa-angle-down ToolbarArrowTop ToolbarColours" onclick="openHead()"></i>
+    </div>
     <aside id="Sidebar">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        Sidebar info goes here
+        <div id="SidebarContent" class="ToolbarColours">
+            Background
+            <input id="background-colour" type="color" value="#bff0f0"></input>
+            Tree
+            <input id="tree-colour" type="color" value="#4c7768"></input>
+            Water
+            <input id="water-colour" type="color" value="#98b8d1"></input>
+            Rock
+            <input id="rock-colour" type="color" value="#9299ad"></input>
+            Grass
+            <input id="grass-colour" type="color" value="#7eb678"></input>
+            Tent
+            <input id="tent-colour" type="color" value="#fe8e8f"></input>
+            Wood
+            <input id="wood-colour" type="color" value="#7e5956"></input>
+            <a href=" javascript:void(0)" onclick="closeNav()"><i class="fas fa-times closeIcon"></i></a>
+        </div>
     </aside>
-    <header class="Header">
-        <button class="openbtn" onclick="openNav()">&#9776; Open Sidebar</button>
-        Header info goes here</header>
-    <canvas id="c"></canvas>
+    <div id="SidebarToggle">
+        <i class="fas fa-angle-left ToolbarColours ToolbarArrowRight" onclick="openNav()"></i>
+    </div>
+    <canvas id="canv"></canvas>
 </body>
 
-<script>
-    function openNav() {
-        document.getElementById("Sidebar").style.width = "250px";
-    }
-    function closeNav() {
-        document.getElementById("Sidebar").style.width = "0";
-    }
-</script>
-
-<script type="module">
-
-    import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/build/three.module.js';
-
-
-    function main() {
-
-        const canvas = document.querySelector('#c');
-        const renderer = new THREE.WebGLRenderer({ canvas });
-
-        const fov = 90;
-        const aspect = 2;
-        const near = 0.1;
-        const far = 5;
-        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        camera.position.z = 2;
-
-        const scene = new THREE.Scene();
-
-        {
-            const color = 0xFFFFFF;
-            const intensity = 1;
-            const light = new THREE.DirectionalLight(color, intensity);
-            light.position.set(-1, 2, 4);
-            scene.add(light);
-        }
-
-        function makeInstance(geometry, color, x) {
-            const material = new THREE.MeshPhongMaterial({ color });
-
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-
-            cube.position.x = x;
-
-            return cube;
-        }
-
-        const boxWidth = 1;
-        const boxHeight = 1;
-        const boxDepth = 1;
-        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
-        const cubes = [
-            makeInstance(geometry, 0x44aa88, 0),
-            makeInstance(geometry, 0x8844aa, -2),
-            makeInstance(geometry, 0xaa8844, 2),
-        ]
-
-        function resizeRendererToDisplaySize(renderer) {
-            const canvas = renderer.domElement;
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-
-            const needResize = canvas.width !== width || canvas.height !== height;
-
-            if (needResize) {
-                renderer.setSize(width, height, false);
-            }
-
-            return needResize;
-        }
-
-        function render(time) {
-            time *= 0.001;
-
-            if (resizeRendererToDisplaySize(renderer)) {
-                const canvas = renderer.domElement;
-                camera.aspect = canvas.clientWidth / canvas.clientHeight;
-                camera.updateProjectionMatrix();
-            }
-
-            cubes.forEach((cube, ndx) => {
-                const speed = 1 + ndx * .1;
-                const rot = time * speed;
-                cube.rotation.x = rot;
-                cube.rotation.y = rot;
-            });
-
-            renderer.render(scene, camera);
-            requestAnimationFrame(render);
-        }
-
-        requestAnimationFrame(render);
-
-    }
-
-    main();
-
-</script>
+</htmL>
