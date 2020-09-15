@@ -7,7 +7,7 @@ function closeNav() {
     document.getElementById("SidebarToggle").style.right = "0";
 }
 function openHead() {
-    document.getElementById("Header").style.height = "10%";
+    document.getElementById("Header").style.height = "75px";
     document.getElementById("HeaderToggle").style.top = "-100";
 }
 function closeHead() {
